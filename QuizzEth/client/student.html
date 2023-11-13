@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quizz Student Page</title>
+</head>
+<body>
+  <h1>Quizz Student Page</h1>
+
+  <!-- Table for displaying the quiz questions -->
+  <table id="questions-table">
+    <tr>
+      <th>Question</th>
+      <th>Answer</th>
+      <th>Result</th>
+      <th>Score</th>
+    </tr>
+  </table>
+
+  <!-- Web3.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+
+  <script>
+    // Initialize the Web3.js library
+    if (typeof web3 !== 'undefined') {
+      web3 = new Web3(web3.currentProvider);
+    } else {
+      // Set the provider you want from Web3.providers
+      web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    }
+
+    // Set the address of the quizz contract
+    const contractAddress = '0x...';
+
+    // Set the ABI of the quizz contract
+    const contractABI = [{...}];
+
+    // Initialize the contract
+    const quizz = new web3.eth.Contract(contractABI, contractAddress);
+
+    // Submit an answer for a quiz question
+    async function submitAnswer(id) {
+      // Get the answer from the form
+      const answer = document.getElementById('answer-' + id).value;
+
+      // Calculate the score for the answer
+      const score = await quizz.methods.calculateScore(id, answer).call();
+
+      // Update the result and score in the table
+      const result = score > 0 ? 'Correct' : 'Incorrect';
+      document.getElementById('result-' + id).innerHTML = result;
+      document.getElementById('score-' + id).innerHTML = score;
+    }
+
+    // Refresh the table of quiz questions
+    async function refreshTable() {
+      // Get the quiz questions from the contract
+      const questions = await quizz.methods.questions().call
+      const questionCount = await quizz.methods.questionCount().call();
+
+      // Clear the table
+      const table = document.getElementById('questions-table');
+      while (table.rows.length > 1) {
+        table.deleteRow(1);
+      }
+
+      // Populate the table with the quiz questions
+      for (let i = 0; i < questionCount; i++) {
+        const question = questions[i];
+        const row = table.insertRow(-1);
+        row.insertCell(-1).innerHTML = question.question;
+        row.insertCell(-1).innerHTML =
+          '<input id="answer-' + i + '" type="text"> ' +
+          '<button onclick="submitAnswer(' + i + ')">Submit</button>';
+        row.insertCell(-1).innerHTML = '<span id="result-' + i + '"></span>';
+        row.insertCell(-1).innerHTML = '<span id="score-' + i + '"></span>';
+      }
+    }
+
+    // Initialize the page
+    window.onload = function() {
+      // Set the default account for transactions
+      web3.eth.defaultAccount = web3.eth.accounts[0];
+
+      // Refresh the table of questions
+      refreshTable();
+    }
+  </script>
+</body>
+</html>
+
