@@ -6,8 +6,8 @@
   },
   "scripts": {
     "compile": "truffle compile",
-    "build": "webpack --config webpack.config.js",
     "deploy": "truffle deploy",
+    "build": "webpack --config webpack.config.js",
     "serve": "node ./dev-server.js"
   },
   "author": "Martino BETTUCCI",

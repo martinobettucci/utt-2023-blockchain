@@ -17,13 +17,16 @@ contract Election {
     mapping(uint => Candidate) public candidates;
     uint public candidatesCount;
 
+    event Voted(uint _candidate);
+    event NewCandidate(string _candidate);
+
     // Constructor
     constructor () {
         owner = msg.sender;
     }
 
     modifier only_unvoted() {
-        require(!voters[msg.sender]);
+        require(!voters[msg.sender], 'Already voted');
         _;
     }
 
@@ -38,6 +41,9 @@ contract Election {
 
         // update candidate vote Count
         candidates[_candidateId].voteCount ++;
+
+        // emit the voted event
+        emit Voted(_candidateId);
     }
 
     modifier only_owners() {
@@ -51,5 +57,8 @@ contract Election {
         c.id = candidatesCount;
         c.name = _name;
         c.voteCount = 0;
+
+        // emit the voted event
+        emit NewCandidate(_name);
     }
 }

@@ -19,7 +19,7 @@ window.addEventListener('load', async () => {
                 }
                 const abiData = await abiResponse.json();
 
-                const addressResponse = await fetch('/abi/ElectionAddress.json');
+                const addressResponse = await fetch('/abi/ElectionAddress.txt');
                 if (!addressResponse.ok) {
                     throw new Error(`HTTP error! status: ${addressResponse.status}`);
                 }
@@ -47,25 +47,27 @@ window.addEventListener('load', async () => {
             document.querySelector("#addCandidate").addEventListener("click", async () => {
                 const candidateName = document.querySelector("#candidateName").value;
                 await electionContract.methods.addCandidate(candidateName).send({from: accounts[0]});
-                // Refresh the page after adding the candidate to update the table
-                location.reload();
             });
 
             // Handle vote button click
             document.querySelector("#addVote").addEventListener("click", async () => {
                 const candidateId = document.querySelector("#candidatesSelect").value;
                 await electionContract.methods.vote(candidateId).send({from: accounts[0]});
-                // Refresh the page after voting to update the table
-                location.reload();
             });
 
             document.getElementById("loader").style.display = "none";
             document.getElementById("content").style.display = "block";
 
-            /* Listen to Vote events and refresh the page
-            electionContract.events.Vote({}).on('data', () => {
-              location.reload();
-            });*/
+            // Listen to Vote events and refresh the page
+            electionContract.events.Voted({}).on('data', () => {
+                alert('Someone have voted!')
+                location.reload();
+            });
+            // New candidate
+            electionContract.events.NewCandidate({}).on('data', () => {
+                alert('A new candidate is available!')
+                location.reload();
+            });
 
         } catch (error) {
             // User denied account access
