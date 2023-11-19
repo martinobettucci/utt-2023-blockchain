@@ -1,3 +1,5 @@
+const {Web3} = require('web3')
+
 window.addEventListener('load', async () => {
     // Modern dapp browsers...
     if (window.ethereum) {
