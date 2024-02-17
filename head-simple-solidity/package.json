@@ -1,0 +1,30 @@
+{
+  "name": "headblockchaindemo",
+  "version": "1.0.0",
+  "description": "demo project pour les etudiants de headn",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "MB",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.4",
+    "@nomicfoundation/hardhat-ignition-ethers": "^0.13.2",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.10",
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.4",
+    "@nomiclabs/hardhat-solhint": "^3.0.1",
+    "chai": "^4.4.1",
+    "hardhat": "^2.19.5",
+    "hardhat-gas-reporter": "^1.0.10",
+    "hardhat-slither": "^1.0.4",
+    "hardhat-storage-layout": "^0.1.7",
+    "mocha": "^10.3.0",
+    "solhint": "^4.1.1",
+    "solidity-coverage": "^0.8.7"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.1"
+  }
+}
